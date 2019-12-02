@@ -1,0 +1,7 @@
+.ReactTable .title-cell {
+  background: white!important;
+}
+
+.ReactTable .auth-role-header {
+  display: none;
+}
