@@ -13,14 +13,20 @@ class Dashboard extends React.Component {
         accessor: "Title",
         Cell: (row: any) => row.value !== "" ? <span >{row.value}</span> : null,
         maxWidth: 200,
-        className: 'center-text'
+        className: 'center-text',
+        filterMethod: (filter: any, row: any) => {
+          return row["Title"].toLowerCase().startsWith(filter.value.toLowerCase())
+        },
       },
       {
         Header: "Description",
         accessor: "Description",
         Cell: (props: any) => props.value !== "" ? <span>{props.value}</span> : null,
         maxWidth: 200,
-        className: 'center-text'
+        className: 'center-text',
+        filterMethod: (filter: any, row: any) => {
+          return row["Description"].toLowerCase().startsWith(filter.value.toLowerCase())
+        },
       },
       {
         Header: "Session Doc Code",
@@ -44,6 +50,9 @@ class Dashboard extends React.Component {
               minRows={props.original.RegionSessions.primaryRegionalAuthor.length}
             />
           );
+        },
+        filterMethod: (filter: any, row: any) => {
+          return row["RegionSessions.primaryRegionalAuthor"].some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
         }
       },
       {
@@ -62,6 +71,9 @@ class Dashboard extends React.Component {
               minRows={props.original.RegionSessions.assignedSpeakers.length}
             />
           );
+        },
+        filterMethod: (filter: any, row: any) => {
+          return row["RegionSessions.assignedSpeakers"].map((val: any) => val.name).some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
         }
       },
       {
@@ -81,6 +93,9 @@ class Dashboard extends React.Component {
             />
           );
         },
+        filterMethod: (filter: any, row: any) => {
+          return row["RegionSessions.category"].map((val: any) => val.name).some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
+        }
       },
       {
         Header: "Region",
@@ -98,6 +113,9 @@ class Dashboard extends React.Component {
               minRows={props.original.RegionSessions.primaryRegionalAuthor.length}
             />
           );
+        },
+        filterMethod: (filter: any, row: any) => {
+          return row["RegionSessions.region"].map((val: any) => val.name).some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
         }
       },
       {
@@ -116,6 +134,9 @@ class Dashboard extends React.Component {
               minRows={props.original.RegionSessions.location.length}
             />
           );
+        },
+        filterMethod: (filter: any, row: any) => {
+          return row["RegionSessions.location"].map((val: any) => val.name).some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
         }
       },
       {
@@ -135,6 +156,9 @@ class Dashboard extends React.Component {
               minRows={props.original.RegionSessions.status.length}
             />
           );
+        },
+        filterMethod: (filter: any, row: any) => {
+          return row["RegionSessions.status"].map((val: any) => val.value).some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
         }
       },
       {
