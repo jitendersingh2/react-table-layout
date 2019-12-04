@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
         maxWidth: 200,
         className: 'center-text',
         filterMethod: (filter: any, row: any) => {
-          return row["Title"].toLowerCase().startsWith(filter.value.toLowerCase())
+          return row["Title"].toLowerCase().includes(filter.value.toLowerCase())
         },
       },
       {
