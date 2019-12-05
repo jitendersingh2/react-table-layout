@@ -16,7 +16,7 @@ const data = [
         },
         {
           "id": 2,
-          "primaryRegionalAuthor": [{ "id": 1, "name": "John" }, { "id": 2, "name": "Mike" }],
+          "primaryRegionalAuthor": [{ "id": 1, "name": "Jane" }, { "id": 2, "name": "Oliver" }],
           "assignedSpeakers": [{ "id": 1, "name": "Abraham" }, { "id": 2, "name": "Donald" }],
           "category": { "id": 2, "name": "Roundtable" },
           "region": { "id": 2, "name": "North America" },
@@ -25,7 +25,7 @@ const data = [
         },
         {
           "id": 3,
-          "primaryRegionalAuthor": [{ "id": 1, "name": "John" }, { "id": 2, "name": "Mike" }],
+          "primaryRegionalAuthor": [{ "id": 1, "name": "Brad" }, { "id": 2, "name": "Colin" }],
           "assignedSpeakers": [{ "id": 1, "name": "Abraham" }, { "id": 2, "name": "Donald" }, { "id": 3, "name": "Zahid" }],
           "category": { "id": 3, "name": "Clinic" },
           "region": { "id": 2, "name": "India" },
@@ -39,7 +39,6 @@ const data = [
     "Title": "Testing ES Picker Duplicates",
     "Description": "Testing description",
     "RegionSessions":
-      [
         [
           {
             "id": 1,
@@ -69,7 +68,6 @@ const data = [
             "status": { "id": 4, "value": "Presentation Templating" }
           }
         ]
-      ]
   },
   // {
   //   "Id": 1393241,

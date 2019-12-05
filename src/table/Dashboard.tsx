@@ -12,6 +12,19 @@ class Dashboard extends React.Component {
   regionFilter = ''
   locationFilter = ''
   statusFilter = ''
+  filterData = (data: any) => {
+    if (this.authorFilter) {
+      return data.primaryRegionalAuthor
+        .map((val: any) => val.name)
+        .some((val: any) => val.toLowerCase().startsWith(this.authorFilter.toLowerCase()));
+    } else if (this.speakerFilter) {
+      return data.assignedSpeakers
+        .map((val: any) => val.name)
+        .some((val: any) => val.toLowerCase().startsWith(this.speakerFilter.toLowerCase()));
+    }
+
+    return data;
+  }
   render() {
     const columns = [
       {
@@ -45,8 +58,10 @@ class Dashboard extends React.Component {
         accessor: "RegionSessions.primaryRegionalAuthor",
         className: "removeBorder",
         Cell: (props: any) => {
-          console.log('this.authorFilter- ', this.authorFilter);
-          const filteredData = props.original.RegionSessions.primaryRegionalAuthor.map((val: any) => ({ primaryRegionalAuthor: val })).filter((val: any) => this.authorFilter == '' || val.primaryRegionalAuthor.toLowerCase().startsWith(this.authorFilter.toLowerCase()));
+          const filteredData = props.row._original.RegionSessions
+            .filter(this.filterData)
+            .map((session: any) => session.primaryRegionalAuthor.map((val: any) => val.name))
+            .map((val: any) => ({ primaryRegionalAuthor: val.join(', ') }));
           return (
             <ReactTable
               data={filteredData}
@@ -60,7 +75,9 @@ class Dashboard extends React.Component {
           );
         },
         filterMethod: (filter: any, row: any) => {
-          return row["RegionSessions.primaryRegionalAuthor"].some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
+          return row._original.RegionSessions.some((val: any) => val.primaryRegionalAuthor
+              .map((val: any) => val.name)
+              .some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase())))
         },
         Filter: (row: any) => (
           <input 
@@ -68,7 +85,7 @@ class Dashboard extends React.Component {
             style={{ width: "100%" }} 
             onChange={event => {
               this.authorFilter = event.target.value;
-              row.onChange(event.target.value);
+              row.onChange(event.target.value, row);
             }} 
           />)
       },
@@ -77,7 +94,10 @@ class Dashboard extends React.Component {
         accessor: "RegionSessions.assignedSpeakers",
         className: "removeBorder",
         Cell: (props: any) => {
-          const filteredData = props.original.RegionSessions.assignedSpeakers.map((val: any) => ({ assignedSpeakers: val.name })).filter((val: any) => this.speakerFilter == '' || val.assignedSpeakers.toLowerCase().startsWith(this.speakerFilter.toLowerCase()));
+          const filteredData = props.original.RegionSessions
+            .filter(this.filterData)
+            .map((session: any) => session.assignedSpeakers.map((val: any) => val.name))
+            .map((val: any) => ({ assignedSpeakers: val.join(', ') }));
           return (
             <ReactTable
               data={filteredData}
@@ -91,7 +111,9 @@ class Dashboard extends React.Component {
           );
         },
         filterMethod: (filter: any, row: any) => {
-          return row["RegionSessions.assignedSpeakers"].map((val: any) => val.name).some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase()))
+          return row._original.RegionSessions.some((val: any) => val.assignedSpeakers
+              .map((val: any) => val.name)
+              .some((val: any) => val.toLowerCase().startsWith(filter.value.toLowerCase())));
         },
         Filter: (row: any) => (
           <input 
@@ -108,7 +130,10 @@ class Dashboard extends React.Component {
         accessor: "RegionSessions.category",
         className: "removeBorder",
         Cell: (props: any) => {
-          const filteredData = props.original.RegionSessions.category.map((val: any) => ({ category: val.name })).filter((val: any) => this.categoryFilter == '' || this.categoryFilter == 'all' || val.category.toLowerCase().startsWith(this.categoryFilter.toLowerCase()));
+          const filteredData = props.original.RegionSessions
+            .map((val: any) => val.category.name)
+            .filter((val: any) => this.categoryFilter == '' || this.categoryFilter == 'all' || val.category.toLowerCase().startsWith(this.categoryFilter.toLowerCase()))
+            .map((val: any) => ({ category: val }));
           return (
             <ReactTable
               data={filteredData}
@@ -139,7 +164,7 @@ class Dashboard extends React.Component {
             > 
               <option value="all">Show All</option>
               {data
-                .map((item: any) => item.RegionSessions.category.map((val: any) => val.name))
+                .map((item: any) => item.RegionSessions.map((val: any) => val.category.name))
                 .flat()     
                 .filter((item, i, s) => s.lastIndexOf(item) == i)
                 .map((value) => (
@@ -156,7 +181,10 @@ class Dashboard extends React.Component {
         accessor: "RegionSessions.region",
         className: "removeBorder",
         Cell: (props: any) => {
-          const filteredData = props.original.RegionSessions.region.map((val: any) => ({ region: val.name })).filter((val: any) => this.regionFilter == '' || val.region.toLowerCase().startsWith(this.regionFilter.toLowerCase()));
+          const filteredData = props.original.RegionSessions
+            .map((val: any) => val.region.name)
+            .filter((val: any) => this.regionFilter == '' || val.region.toLowerCase().startsWith(this.regionFilter.toLowerCase()))
+            .map((val: any) => ({ region: val }));
           return (
             <ReactTable
               data={filteredData}
@@ -187,7 +215,10 @@ class Dashboard extends React.Component {
         accessor: "RegionSessions.location",
         className: "removeBorder",
         Cell: (props: any) => {
-          const filteredData = props.original.RegionSessions.location.map((val: any) => ({ location: val.name })).filter((val: any) => this.locationFilter == '' || val.location.toLowerCase().startsWith(this.locationFilter.toLowerCase()));
+          const filteredData = props.original.RegionSessions
+            .map((val: any) => val.location.name)
+            .filter((val: any) => this.locationFilter == '' || val.location.toLowerCase().startsWith(this.locationFilter.toLowerCase()))
+            .map((val: any) => ({ location: val }));
           return (
             <ReactTable
               data={filteredData}
@@ -218,7 +249,10 @@ class Dashboard extends React.Component {
         accessor: "RegionSessions.status",
         className: "removeBorder",
         Cell: (props: any) => {
-          const filteredData = props.original.RegionSessions.status.map((val: any) => ({ status: val.value })).filter((val: any) => this.statusFilter == '' || val.status.toLowerCase().startsWith(this.statusFilter.toLowerCase()));
+          const filteredData = props.original.RegionSessions
+            .map((val: any) => val.status.value)
+            .filter((val: any) => this.statusFilter == '' || val.status.toLowerCase().startsWith(this.statusFilter.toLowerCase()))
+            .map((val: any) => ({ status: val }));
           return (
             <ReactTable
               data={filteredData}
@@ -252,7 +286,7 @@ class Dashboard extends React.Component {
         Cell: (props: any) => {
           return (
             <ReactTable
-              data={props.original.RegionSessions.status.map((val: any) => ({ status: val.value }))}
+              data={props.original.RegionSessions.map((val: any) => ({ status: val.status.value }))}
               columns={[{
                 headerClassName: "auth-role-header",
                 accessor: "status",
@@ -267,13 +301,13 @@ class Dashboard extends React.Component {
                   </div> : null
               }]}
               showPagination={false}
-              minRows={props.original.RegionSessions.status.length}
+              minRows={props.original.RegionSessions.length}
             />
           );
         }
       },
     ]
-    console.log('data: ', data);
+    
     return (
       <div>
         <ReactTable
